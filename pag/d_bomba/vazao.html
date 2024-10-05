@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Hidráulica</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 8vh;
+            background-color: #f8f9fa;
+        }
+         /* Navbar */
+         .navbar {
+            background-color: #007bff !important;
+            color: white;
+        }
+    
+        .navbar-brand {
+            color: white !important;
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    
+        .navbar-light .navbar-nav .nav-link {
+            color: white;
+        }
+    
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: #0056b3;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #004494;
+        }
+        .result p {
+            margin: 0;
+        }
+        @media (max-width: 576px) {
+            .form-group {
+                margin-bottom: 5px;
+            }
+        }
+        .btn-check {
+            display: none; /* Oculta o checkbox padrão */
+        }
+
+        .btn-check:checked + .btn {
+            background-color: #007bff; /* Cor de fundo quando checked */
+            color: white; /* Cor do texto quando checked */
+        }
+
+        .btn-check + .btn {
+            cursor: pointer; /* Mostra que é clicável */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-center" href="../../index.html">Web Hidráulica</a>
+        </div>
+      </nav>
+    <div class="container">
+      <div class="card">
+        <div class="card-header text-center">
+          <h2>Dimensionamento de Bombas</h2>
+          <h4>Cálculo da Potência</h4>
+        </div>
+        <div class="card-body">
+          <form id="calcForm">
+            <!-- Switch para selecionar método -->
+            <div class="form-group text-center">
+              <label for="calcMethod">Método de cálculo dos diâmetros:</label>
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="calcMethod">
+                <label class="custom-control-label" for="calcMethod">Forcheimmer / Q=VA</label>
+              </div>
+            </div>
+  
+            <div class="form-row align-items-center mb-3">
+              <!-- Entrada de vazão -->
+              <div class="form-group col-md-3">
+                <label for="q">Vazão:</label>
+                <input type="number" class="form-control" id="q" required>
+              </div>
+              
+              <!-- Select para unidade de vazão -->
+              <div class="form-group col-md-3">
+                <label for="unidade">Unidade de Vazão:</label>
+                <select class="form-control" id="unidade" required>
+                  <option value="m3h">m³/h</option>
+                  <option value="ls">l/s</option>
+                  <option value="m3s">m³/s</option>
+                </select>
+              </div>
+  
+              <!-- Aproximação -->
+              <div class="form-group col-md-2">
+                <div class="form-check mt-4">
+                  <input type="checkbox" class="btn-check" id="aproximar" checked autocomplete="off">
+                  <label class="btn btn-primary" for="aproximar">Aproximação</label>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Outras entradas -->
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="ctr">Comprimento da tubulação de recalque (m):</label>
+                <input type="number" class="form-control" id="ctr" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="cts">Comprimento da tubulação de sucção (m):</label>
+                <input type="number" class="form-control" id="cts" required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="rendimento">Rendimento em decimal:</label>
+                <input type="number" class="form-control" id="rendimento" step="0.01" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="velocidade">Velocidade requerida (m/s):</label>
+                <input type="number" class="form-control" id="velocidade" step="0.01" required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="altura1">Altura do Recalque (m):</label>
+                <input type="number" class="form-control" id="altura1" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="altura2">Altura da Sucção (m):</label>
+                <input type="number" class="form-control" id="altura2" required>
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label>A Bomba está afogada?</label>
+              <select class="form-control" id="afogado" required>
+                <option value="n">Não</option>
+                <option value="s">Sim</option>
+              </select>
+            </div>
+  
+            <button type="submit" class="btn btn-primary btn-block">Calcular</button>
+          </form>
+        </div>
+      </div>
+      <div id="result" class="mt-4"></div>
+    </div>
+  
+    <script>
+      document.getElementById('calcForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Impede o envio do formulário
+  
+        // Obtendo os valores do formulário
+        const q = parseFloat(document.getElementById('q').value);
+        const unidade = document.getElementById('unidade').value;
+        const ctr = parseFloat(document.getElementById('ctr').value);
+        const cts = parseFloat(document.getElementById('cts').value);
+        const rendimento = parseFloat(document.getElementById('rendimento').value);
+        const velocidade = parseFloat(document.getElementById('velocidade').value);
+        const altura1 = parseFloat(document.getElementById('altura1').value);
+        const afogado = document.getElementById('afogado').value;
+        const calcMethod = document.getElementById('calcMethod').checked; // True para Q=VA, false para Forcheimmer
+        let altura2 = parseFloat(document.getElementById('altura2').value);
+  
+        // Ajuste para altura de sucção se a bomba estiver afogada
+        if (afogado === "s") {
+          altura2 = -altura2;
+        }
+  
+        // Cálculo da vazão convertida para m³/s
+        let vazao;
+        switch (unidade) {
+          case 'm3h':
+            vazao = q / 3600; // Convertendo de m³/h para m³/s
+            break;
+          case 'ls':
+            vazao = q / 1000; // Convertendo de l/s para m³/s
+            break;
+          case 'm3s':
+            vazao = q; // Mantém m³/s
+            break;
+        }
+  
+        // Cálculo de diâmetro com Forcheimmer ou Q=VA
+        let Drecalque, Dsuccao;
+        if (calcMethod) {
+          // Método Q=VA
+          const Dr = Math.sqrt((4 * vazao) / (3.14 * velocidade)) * 1000; // Diâmetro em mm
+          const diametros_comerciais = [16, 20, 25, 32, 40, 50, 60, 75, 85, 110, 140];
+          Drecalque = diametros_comerciais.find(d => d > Dr);
+          Dsuccao = diametros_comerciais.find(d => d > Drecalque);
+        } else {
+          // Método Forcheimmer
+          const Dr = 0.878280101 * Math.sqrt(vazao) * 1000;
+          const diametros_comerciais = [16, 20, 25, 32, 40, 50, 60, 75, 85, 110, 140];
+          Drecalque = diametros_comerciais.find(d => d > Dr);
+          Dsuccao = diametros_comerciais.find(d => d > Drecalque);
+        }
+  
+        // Cálculo de J1 e J2
+        const J1 = (4 / (Drecalque / 1000)) * (0.000135 * (Math.pow(velocidade, 7) / (Drecalque / 1000)) ** 0.25);
+        const J2 = (4 / (Dsuccao / 1000)) * (0.000135 * (Math.pow(velocidade, 7) / (Dsuccao / 1000)) ** 0.25);
+  
+        // Cálculo das alturas manométricas e potência
+        const Hfr = J1 * ctr;
+        const Hfs = J2 * cts;
+        const Hman = altura1 + altura2 + Hfr + Hfs;
+        const pot = ((1000 * Hman * vazao) / (75 * rendimento)).toFixed(2);
+  
+        // Exibição dos resultados
+        document.getElementById('result').innerHTML = `
+          <div class="card">
+            <div class="card-body result">
+              <h4>Resultados:</h4>
+              <p>Diâmetro do Recalque: ${Drecalque} mm</p>
+              <p>Diâmetro da Sucção: ${Dsuccao} mm</p>
+              <p>Uma Bomba com potência de: ${pot} C.V</p>
+              <p>Para uma altura Manométrica de: ${Hman.toFixed(2)} m</p>
+              <p>Com uma vazão de: ${(vazao * 1000).toFixed(2)} l/s</p>
+            </div>
+          </div>
+        `;
+      });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+</html>
