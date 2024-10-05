@@ -6,122 +6,156 @@
     <title>Web Hidráulica</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Estilos personalizados para a página */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding-top: 70px; /* Espaço para a navbar fixa */
-        }
-    
-        /* Navbar */
-        .navbar {
-            background-color: #007bff !important;
-            color: white;
-        }
-    
-        .navbar-brand {
-            color: white !important;
-            font-size: 24px;
-            font-weight: bold;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    
-        .navbar-light .navbar-nav .nav-link {
-            color: white;
-        }
-    
-        .jumbotron {
-            background-color: #f7f7f7;
-            margin-top: 30px;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            text-align: center;
-        }
-    
-        .display-4 {
-            font-size: 36px;
-            font-weight: bold;
-            color: #007bff;
-        }
-        .display-2 {
-            font-weight: bold;
-            color: #007bff;
-        }
-        .lead {
-            font-size: 18px;
-            color: #6c757d;
-        }
-    
-        .container h2 {
-            color: #007bff;
-        }
-    
-        /* Card styles */
-        .card {
-            margin-bottom: 30px;
-            border: none;
-        }
-    
-        .card-title {
-            font-weight: bold;
-            font-size: 22px;
-            color: #007bff;
-        }
-    
-        .card-text {
-            font-size: 16px;
-            color: #333;
-        }
-    
-        .list-group-item a {
-            color: #007bff;
-            text-decoration: none;
-        }
-    
-        .list-group-item a:hover {
-            text-decoration: underline;
-        }
+      /* Estilos personalizados para a página */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding-top: 70px; /* Espaço para a navbar fixa */
+      }
+  
+      /* Navbar */
+      .navbar {
+        background-color: #007bff !important;
+        color: white;
+      }
+  
+      .navbar-brand {
+        color: white !important;
+        font-size: 24px;
+        font-weight: bold;
+        margin-left: auto;
+        margin-right: auto;
+      }
+  
+      .navbar-light .navbar-nav .nav-link {
+        color: white;
+      }
+  
+      .jumbotron {
+        background-color: #f7f7f7;
+        margin-top: 30px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        text-align: center;
+      }
+  
+      .display-4 {
+        font-size: 36px;
+        font-weight: bold;
+        color: #007bff;
+      }
+  
+      .display-2 {
+        font-weight: bold;
+        color: #007bff;
+      }
+  
+      .lead {
+        font-size: 18px;
+        color: #6c757d;
+      }
+  
+      .container h2 {
+        color: #007bff;
+      }
+  
+      /* Card styles */
+      .card {
+        margin-bottom: 30px;
+        border: none;
+      }
+  
+      .card-title {
+        font-weight: bold;
+        font-size: 22px;
+        color: #007bff;
+      }
+  
+      .card-text {
+        font-size: 16px;
+        color: #333;
+      }
+  
+      .list-group-item a {
+        color: #007bff;
+        text-decoration: none;
+      }
+  
+      .list-group-item a:hover {
+        text-decoration: underline;
+      }
     </style>
-    </head>
-    <body>
-    
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-md navbar-light fixed-top">
-        <div class="container">
-          <a class="navbar-brand text-center" href="index.html">Web Hidráulica</a>
-        </div>
-      </nav>
-    
-      <!-- Título principal -->
-      <div class="jumbotron">
-        <div class="container">
-          <h1 class="display-2">Web Hidráulica</h1>
-          <p class="lead">Ferramentas para facilitar a sua vida.</p>
-        </div>
-      </div>
-    
-      <!-- Seção: Conversores -->
+  </head>
+  <body>
+  
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-light fixed-top">
       <div class="container">
-        <h2 class="mb-4 display-4">Instalações Hidrossanitárias</h2>
-        <div class="row">
-          <!-- Card de Dimensionamento de Bombas -->
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
-                <h3 class="card-title">Dimensionamento de bombas</h3>
-                <p class="card-text">Calcule a potência de uma bomba para uma edificação a partir do:</p>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item"><a href="pag/d_bomba/consumo_diario.html">Consumo Diário</a></li>
-                  <li class="list-group-item"><a href="pag/d_bomba/vazao.html">Vazão requerida</a></li>
-                </ul>
-              </div>
+        <a class="navbar-brand text-center" href="index.html">Web Hidráulica</a>
+      </div>
+    </nav>
+  
+    <!-- Título principal -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-2">Web Hidráulica</h1>
+        <p class="lead">Ferramentas para facilitar a sua vida.</p>
+      </div>
+    </div>
+  
+    <!-- Seção: Instalações Hidrossanitárias -->
+    <div class="container">
+      <h2 class="mb-4 display-4">Instalações Hidrossanitárias</h2>
+      <div class="row">
+        <!-- Card de Dimensionamento de Bombas -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Dimensionamento de Bombas </h3>
+              <p class="card-text">Calcule a potência de uma bomba para uma edificação a partir do:</p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="pag/d_bomba/consumo_diario.html">Consumo Diário</a></li>
+                <li class="list-group-item"><a href="pag/d_bomba/vazao.html">Vazão requerida</a></li>
+              </ul>
             </div>
           </div>
         </div>
-        <h3 class="card-title">Criado por Ícaro Lira - 04/10/2024</h3>
+  
+        <!-- Card de outras funcionalidades -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Ferramentas Rápidas</h3>
+              <p class="card-text">Não precisa fazer tudo? <br>Economize tempo usando as ferramentas rápidas.</p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="pag/f_rapidas/perda_carga.html">Calcular Perda de Carga: J (m/m)</a></li>
+                <li class="list-group-item"><a href="pag/f_rapidas/diametros.html">Calcular Diâmetro das Tubulações</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Card de mais uma funcionalidade   -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Associação de bombas</h3>
+              <p class="card-text">Crie um sistema combinando bombas em série e em paralelo.</p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="#">Gerar Esquema</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+
+   </div>
+    <footer class="text-center mt-4">
+      <h3 class="card-title">Criado por Ícaro Lira - 04/10/2024</h3>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

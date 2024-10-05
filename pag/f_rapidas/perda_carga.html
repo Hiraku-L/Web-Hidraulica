@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Hidráulica</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      
+        body {
+            padding: 1vh;
+            background-color: #f8f9fa;
+        }
+         /* Navbar */
+         .navbar {
+            background-color: #007bff !important;
+            color: white;
+        }
+    
+        .navbar-brand {
+            color: white !important;
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    
+        .navbar-light .navbar-nav .nav-link {
+            color: white;
+        }
+    
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: #0056b3;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #004494;
+        }
+        .result p {
+            margin: 0;
+        }
+        @media (max-width: 576px) {
+            .form-group {
+                margin-bottom: 5px;
+            }
+        }
+        .btn-check {
+            display: none; /* Oculta o radio button padrão */
+        }
+
+        .btn-check:checked + .btn {
+            background-color: #007bff; /* Cor de fundo quando checked */
+            color: white; /* Cor do texto quando checked */
+        }
+
+        .btn-check + .btn {
+            border: 1px solid #007bff;
+            background-color: white;
+            color: #007bff;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            cursor: pointer; /* Mostra que é clicável */
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .btn-check + .btn:hover {
+            background-color: #e2e6ea;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand text-center" href="../../index.html">Web Hidráulica</a>
+        </div>
+    </nav>
+    
+    <div class="container mt-5 pt-5">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>Ferramentas Rápidas</h2>
+                <h4>Cálculo de Perda de Carga</h4>
+            </div>
+            <div class="card-body">
+                <form id="calcForm">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="velocidade">Velocidade requerida em m/s:</label>
+                            <input type="number" class="form-control" id="velocidade" step="0.01" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="comprimento">Comprimento da Tubulação em m:</label>
+                            <input type="number" class="form-control" id="comprimento" step="0.01" required>
+                        </div>
+                    </div>
+    
+                    <h5>Escolha o Diâmetro Comercial (mm):</h5>
+                    <div class="form-row mb-3">
+                        <div class="btn-group" role="group" aria-label="Diâmetro">
+                            <input type="radio" class="btn-check" name="diametro" id="diametro16" value="16" required>
+                            <label class="btn" for="diametro16">16</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro20" value="20">
+                            <label class="btn" for="diametro20">20</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro25" value="25">
+                            <label class="btn" for="diametro25">25</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro32" value="32">
+                            <label class="btn" for="diametro32">32</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro40" value="40">
+                            <label class="btn" for="diametro40">40</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro50" value="50">
+                            <label class="btn" for="diametro50">50</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro60" value="60">
+                            <label class="btn" for="diametro60">60</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro75" value="75">
+                            <label class="btn" for="diametro75">75</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro85" value="85">
+                            <label class="btn" for="diametro85">85</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro110" value="110">
+                            <label class="btn" for="diametro110">110</label>
+
+                            <input type="radio" class="btn-check" name="diametro" id="diametro140" value="140">
+                            <label class="btn" for="diametro140">140</label>
+                        </div>
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary btn-block mt-4">Calcular</button>
+                </form>
+            </div>
+        </div>
+        <div id="result" class="mt-4"></div>
+    </div>
+    
+    <script>
+        document.getElementById('calcForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio do formulário
+    
+            // Obtendo os valores do formulário
+            const velocidade = parseFloat(document.getElementById('velocidade').value);
+            const comprimento = parseFloat(document.getElementById('comprimento').value);
+            // Pegando o diâmetro selecionado
+            const diametro = document.querySelector('input[name="diametro"]:checked').value;
+    
+            // Cálculo da perda de carga
+            const J1 = (4 / (diametro / 1000)) * (0.000135 * (Math.pow(velocidade, 7) / (diametro / 1000)) ** 0.25);
+            const Hf = J1 * comprimento
+            // Exibe o resultado
+            document.getElementById('result').innerHTML = `
+                <div class="card">
+                    <div class="card-body result">
+                        <h4>Resultados:</h4>
+                        <p>Perda de Carga unitária (J): ${J1.toFixed(4)} m/m</p>
+                        <p>Perda de Carga Total (Hf): ${Hf.toFixed(4)}m</p>
+                    </div>
+                </div>
+            `;
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>

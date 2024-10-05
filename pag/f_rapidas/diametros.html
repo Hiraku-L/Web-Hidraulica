@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Hidráulica</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      body {
+          padding-top: 10vh;
+          background-color: #f8f9fa;
+      }
+      
+      /* Navbar */
+      .navbar {
+          background-color: #007bff !important;
+          color: white;
+      }
+
+      .navbar-brand {
+          color: white !important;
+          font-size: 24px;
+          font-weight: bold;
+          text-align: center;
+          width: 100%;
+      }
+
+      .navbar-light .navbar-nav .nav-link {
+          color: white;
+      }
+
+      /* Card */
+      .card {
+          border: none;
+          border-radius: 15px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          max-width: 600px;
+          margin: 0 auto;
+      }
+
+      .card-header {
+          background-color: #007bff;
+          color: white;
+          border-radius: 15px 15px 0 0;
+          text-align: center;
+      }
+
+      .form-group label {
+          font-weight: bold;
+      }
+
+      .btn-primary {
+          background-color: #0056b3;
+          border: none;
+      }
+
+      .btn-primary:hover {
+          background-color: #004494;
+      }
+
+      /* Result Card */
+      .result-card {
+          max-width: 600px;
+          margin: 2rem auto;
+          text-align: center;
+      }
+
+      .result p {
+          margin: 0;
+          font-size: 1.2rem;
+          font-weight: bold;
+      }
+
+      /* Centralizando Elementos */
+      .form-row, .custom-switch {
+          justify-content: center;
+      }
+
+      @media (max-width: 576px) {
+          .form-group {
+              margin-bottom: 5px;
+          }
+      }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand text-center" href="../../index.html">Web Hidráulica</a>
+    </div>
+</nav>
+
+  <div class="container">
+      <div class="card mt-5">
+          <div class="card-header">
+              <h2>Cálculo de Diâmetros de Recalque e Sucção</h2>
+          </div>
+          <div class="card-body">
+              <form id="calcForm">
+                  <!-- Tipo de cálculo -->
+                  <div class="form-group text-center">
+                      <label for="calcType">Escolha o tipo de cálculo:</label>
+                      <select class="form-control" id="calcType">
+                          <option value="vazao">Vazão</option>
+                          <option value="consumo">Consumo Diário</option>
+                      </select>
+                  </div>
+
+                  <!-- Entrada de vazão -->
+                  <div class="form-row align-items-center" id="vazaoFields">
+                      <div class="form-group col-md-4">
+                          <label for="q">Vazão:</label>
+                          <input type="number" class="form-control" id="q">
+                      </div>
+
+                      <!-- Select para unidade de vazão -->
+                      <div class="form-group col-md-4">
+                          <label for="unidade">Unidade de Vazão:</label>
+                          <select class="form-control" id="unidade">
+                              <option value="m3h">m³/h</option>
+                              <option value="ls">l/s</option>
+                              <option value="m3s">m³/s</option>
+                          </select>
+                      </div>
+                  </div>
+
+                  <!-- Entrada de consumo diário -->
+                  <div class="form-row align-items-center" id="consumoFields" style="display:none;">
+                      <div class="form-group col-md-12">
+                          <label for="consumo">Consumo Diário (m³):</label>
+                          <input type="number" class="form-control" id="consumo">
+                      </div>
+                  </div>
+
+                  <!-- Método de cálculo -->
+                  <div class="form-group text-center" id="methodSelection" style="display:none;">
+                      <label for="calcMethod">Escolha o método de cálculo:</label>
+                      <select class="form-control" id="calcMethod">
+                          <option value="forcheimmer">Forcheimmer</option>
+                          <option value="qva">Q=VA</option>
+                      </select>
+                  </div>
+
+                  <!-- Aproximação -->
+                  <div class="form-group text-center" id="aproximacao" style="display:none;">
+                      <div class="form-check">
+                          <input type="checkbox" class="btn-check" id="aproximar" checked autocomplete="off">
+                          <label class="btn btn-primary" for="aproximar">Aproximação</label>
+                      </div>
+                  </div>
+
+                  <!-- Entrada de velocidade -->
+                  <div class="form-group">
+                      <label for="velocidade">Velocidade requerida (m/s):</label>
+                      <input type="number" class="form-control" id="velocidade" step="0.01" required>
+                  </div>
+
+                  <!-- Botão de cálculo -->
+                  <button type="submit" class="btn btn-primary btn-block">Calcular</button>
+              </form>
+          </div>
+      </div>
+
+      <!-- Resultados -->
+      <div id="result" class="result-card"></div>
+  </div>
+
+  <script>
+      document.getElementById('calcType').addEventListener('change', function() {
+          const calcType = this.value;
+          if (calcType === 'vazao') {
+              document.getElementById('vazaoFields').style.display = 'flex';
+              document.getElementById('consumoFields').style.display = 'none';
+              document.getElementById('methodSelection').style.display = 'none';
+              document.getElementById('aproximacao').style.display = 'none';
+              // Limpar campos
+              document.getElementById('consumo').value = '';
+          } else {
+              document.getElementById('vazaoFields').style.display = 'none';
+              document.getElementById('consumoFields').style.display = 'flex';
+              document.getElementById('methodSelection').style.display = 'block';
+              document.getElementById('aproximacao').style.display = 'block';
+              // Limpar campos
+              document.getElementById('q').value = '';
+              document.getElementById('unidade').value = 'm3h'; // Resetar para valor padrão
+          }
+      });
+
+      document.getElementById('calcForm').addEventListener('submit', function(event) {
+          event.preventDefault(); // Impede o envio do formulário
+
+          const calcType = document.getElementById('calcType').value;
+          let vazao;
+
+          if (calcType === 'vazao') {
+              const q = parseFloat(document.getElementById('q').value);
+              const unidade = document.getElementById('unidade').value;
+
+              switch (unidade) {
+                  case 'm3h':
+                      vazao = q / 3600; // Convertendo de m³/h para m³/s
+                      break;
+                  case 'ls':
+                      vazao = q / 1000; // Convertendo de l/s para m³/s
+                      break;
+                  case 'm3s':
+                      vazao = q; // Mantém m³/s
+                      break;
+              }
+          } else {
+              const consumo = parseFloat(document.getElementById('consumo').value);
+              // Consumo diário para vazão (m³/dia para m³/s)
+              const aproximar = document.getElementById('aproximar').checked;
+              if (aproximar) {
+                  vazao = (consumo / 5)/3600; // Aproximando
+              } else {
+                  vazao = ((consumo / 24) * 5)/3600; // Sem aproximação
+              }
+          }
+          console.log(vazao)
+          const velocidade = parseFloat(document.getElementById('velocidade').value);
+          const calcMethod = document.getElementById('calcMethod').value; // 'forcheimmer' ou 'qva'
+
+          // Cálculo de diâmetro com Forcheimmer ou Q=VA
+          let Drecalque, Dsuccao;
+        if (calcMethod === "qva") {
+          // Método Q=VA
+          const Dr = Math.sqrt((4 * vazao) / (3.14 * velocidade)) * 1000; // Diâmetro em mm
+          const diametros_comerciais = [16, 20, 25, 32, 40, 50, 60, 75, 85, 110, 140];
+          Drecalque = diametros_comerciais.find(d => d > Dr);
+          Dsuccao = diametros_comerciais.find(d => d > Drecalque);
+        } else {
+          // Método Forcheimmer
+          const Dr = 0.878280101 * Math.sqrt(vazao) * 1000;
+          const diametros_comerciais = [16, 20, 25, 32, 40, 50, 60, 75, 85, 110, 140];
+          Drecalque = diametros_comerciais.find(d => d > Dr);
+          Dsuccao = diametros_comerciais.find(d => d > Drecalque);
+        }
+
+          // Exibir resultado
+          document.getElementById('result').innerHTML = `
+              <div class="card result">
+                  <p>Diâmetro de Recalque: ${Drecalque} mm</p>
+                  <p>Diâmetro de Sucção: ${Dsuccao} mm</p>
+              </div>
+          `;
+      });
+  </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
